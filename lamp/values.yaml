@@ -360,3 +360,6 @@ keepSecrets: false
 ## replicaCount > 1 will corrupt your database if one is used. Future releases
 ## might enable elastic scaling via galeradb
 replicaCount: 1
+
+## The signing email address for the SSL certification
+emailAddress: "test@test.com"
