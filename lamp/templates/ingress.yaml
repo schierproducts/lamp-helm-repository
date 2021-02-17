@@ -8,8 +8,9 @@ kind: Ingress
 metadata:
   name: {{ template "lamp.fullname" . }}-app
   annotations:
+    kubernetes.io/ingress.class: nginx
     {{- if .Values.ingress.ssl }}
-    kubernetes.io/tls-acme: "true"
+    cert-manager.io/cluster-issuer: letsencrypt-{{ template "lamp.fullname" . }}
     {{- end }}
     {{- if .Values.ingress.htpasswdString }}
     ingress.kubernetes.io/auth-type: basic
@@ -20,7 +21,9 @@ metadata:
     ingress.kubernetes.io/configuration-snippet: |
       rewrite ^(.*)$ $scheme://www.{{ template "lamp.domain" . }}$1;
     {{- end }}
-{{ toYaml .Values.ingress.annotations | indent 4 }}
+    {{- if .Values.ingress.annotations }}
+    {{ toYaml .Values.ingress.annotations }}
+    {{- end }}
 spec:
   {{- if .Values.ingress.ssl }}
   tls:
